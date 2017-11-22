@@ -27,7 +27,7 @@
           || /^[\u0fd9-\u0fff]*$/.test(char) // Throw away more unicode white spaces.
           || /\s/.test(char) // Throw away whitespaces.
         ) continue;
-        res += char;
+        res += char
       }
       return res.slice(0, max_i)
     }
@@ -163,21 +163,22 @@
         }
         // Our only 'public' facing function.
         return function(src) {
+          var a1, a2;
           // Begin alphabet configuration.
-          if(srcIsData) {
+          if(srcIsData)
             // Our source is not a number, so represent it as one.
             src = Buffer.from(src).toString('hex');
             a1 = alphabet(16);
-            a2 = t.outAlphabet ? t.outAlphabet.slice(0, matches[2]) : alphabet(+matches[2])
           } else if(outIsData) {
-            a1 = t.incAlphabet ? t.incAlphabet.slice(0, matches[1]) : alphabet(+matches[1]);
             a2 = alphabet(16)
-          } else {
-            a1 = t.incAlphabet ? t.incAlphabet.slice(0, matches[1]) : alphabet(+matches[1]);
-            a2 = t.outAlphabet ? t.outAlphabet.slice(0, matches[2]) : alphabet(+matches[2]);
-            if(matches[1] > a1.length || matches[2] > a2.length) {
-              throw new Error("Alphabet not long enough, consider manually setting a larger one via `setGlobalAlphabet`.")
-            }
+          }
+          !a1 && (a1 = t.incAlphabet ? t.incAlphabet.slice(0, matches[1]) : alphabet(+matches[1]));
+          !a2 && (a2 = t.outAlphabet ? t.outAlphabet.slice(0, matches[2]) : alphabet(+matches[2]));
+          if(!srcIsData && matches[1] > a1.length) {
+            throw new Error("From alphabet not long enough, consider manually setting a larger one via `setFromAlphabet`.")
+          }
+          if(!outIsData && matches[2] > a2.length) {
+            throw new Error("To alphabet not long enough, consider manually setting a larger one via `setToAlphabet`.")
           }
           // If our output is not to be a number, assume its text/utf8..
           return outIsData ? Buffer.from(convertBase(src, a1, a2), 'hex').toString('utf8') : convertBase(src, a1, a2)
