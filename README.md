@@ -42,8 +42,7 @@ C = require('./encode-x')(/* [from alphabet], [to alphabet] */).fromXXXtoXXX(dat
 
 C = require('./encode-x')
 C.setToAlphabet = C.setFromAlphabet = "1234567890abcdefgahiklm"
-C.from10to999(data) // Error is thrown because your to alphabet cannot is to small for base999.
-     
+C.from10to999(data) // Error is thrown because the alphabet it to small for base999.
 ```
 
 # Instalation
