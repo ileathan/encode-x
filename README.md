@@ -21,7 +21,7 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 # Features
 
-**1.)** In built alphabets, up to base 65411 by degault.
+**1.)** In built alphabets, up to base 65411 by default.
 
 **2.)** `setGlobalAlphabet`, `setFromAlphabet`, `setToAlphabet`, and `resetAlphabets` API for ease.
 
