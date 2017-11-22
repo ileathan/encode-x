@@ -29,9 +29,9 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 **4.)** Ability to encode and decode streems of pure 0's. (usually lost data in encodings).
 
-**5.)** Ability to encode and from seperate alphabets respectivly.
+**5.)** Ability to encode to an alphabet differant than the incomings base alphabet.
 
-**6.)** Using the above feature we can swap from alphabet 1 to 2 using `from10To10` for example (with diff alphabets).
+**6.)** For example using the above feature we can swap from alphabet 1 to 2 using `from10To10`.
 
 The above code snippet illustrates how simple it would be to execute the encoder, you may also call it directly without the `new` keyword.
 
