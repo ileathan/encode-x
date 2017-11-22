@@ -9,7 +9,8 @@ C.from16To64("16")     // 'P'
 C.from10to64("63")     // '/'
 C.from10to65000("125") // '¿'
 C.fromUTF8To666("The devil says, SICK!") // '½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ'
-Con.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ') // 'The devil says, SICK!"
+C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ') // 'The devil says, SICK!"
+```
 
 As you can tell, the module works for all bases and uses a Proxy to capture the methods, they are not actually all defined on the prototype.
 
@@ -47,7 +48,7 @@ C.from10to999(data) // Error is thrown because your to alphabet cannot is to sma
 
 # Instalation
 
-```npm install encode-```
+```npm install encode-x```
 
 # Dependencies
 
