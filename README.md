@@ -4,12 +4,12 @@ Infinite base encoder/decoder. Can handle bases up to full 64 bit floating point
 ```javascript
 const C = require('encode-x')();
 
-C.from10To16("16")       // 'f'
-C.from16To64("16")     // 'P'
-C.from10to64("63")     // '/'
-C.from10to65000("125") // '¿'
-C.fromUTF8To666("The devil says, SICK!") // '½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ'
-C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ') // 'The devil says, SICK!"
+C.from10To16("16")                        // 'f'
+C.from16To64("16")                        // 'P'
+C.from10to64("63")                        // '/'
+C.from10to65000("125")                    // '¿'
+C.fromUTF8To666("The devil says, SICK!")  // '½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ'
+C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ')    // 'The devil says, SICK!"
 ```
 
 As you can tell, the module works for all bases and uses a Proxy to capture the methods, they are not actually all defined on the prototype.
