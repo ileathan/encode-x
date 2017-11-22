@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Converter</span>(<span class="hljs-params"></span>) </span>{</pre></div></div>
+  <span class="hljs-keyword">var</span> LAST_COMPUTED_ALPH;</pre></div></div>
             
         </li>
         
@@ -42,12 +42,26 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Allows different alphabets for incoming and outgoing encoding.</p>
+              <p>Precomputed bases to help out, specifically base58 for bitcoin and base64 for blobs.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.outAlphabet = <span class="hljs-keyword">this</span>.incAlpabet = <span class="hljs-literal">null</span>;
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> BASES = {
+    <span class="hljs-attr">BASE_2</span>: <span class="hljs-string">"01"</span>,
+    <span class="hljs-attr">BASE_8</span>: <span class="hljs-string">"01234567"</span>,
+    <span class="hljs-attr">BASE_11</span>: <span class="hljs-string">"0123456789a"</span>,
+    <span class="hljs-attr">BASE_16</span>: <span class="hljs-string">"0123456789abcdef"</span>,
+    <span class="hljs-attr">BASE_32</span>: <span class="hljs-string">"0123456789ABCDEFGHJKMNPQRSTVWXYZ"</span>,
+    <span class="hljs-attr">BASE_36</span>: <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyz"</span>,
+    <span class="hljs-attr">BASE_58</span>: <span class="hljs-string">"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvqxyz"</span>,
+    <span class="hljs-attr">BASE_62</span>: <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>,
+    <span class="hljs-attr">BASE_64</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span>,
+    <span class="hljs-attr">BASE_66</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~"</span>,
+    <span class="hljs-attr">BASE_95</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&amp;*()_`&lt;&gt;,.?'\";:[{]}\\|=- "</span>,
+    <span class="hljs-attr">FALL_BACK</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">max_i</span>)</span>{
+      <span class="hljs-keyword">let</span> res = <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&amp;*()_`&lt;&gt;,.?'\";:[{]}\\|=- "</span>;
+      <span class="hljs-keyword">if</span>(res.length &gt;= max_i) <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i);
+      <span class="hljs-keyword">if</span>(LAST_COMPUTED_ALPH.length &gt;= max_i) <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i);</pre></div></div>
             
         </li>
         
@@ -58,25 +72,24 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Precomputed bases to help out, specifically base58 for bitcoin and base64 for blobs.</p>
+              <p>If the precomputations didnt help pump them up by looping through unicode.
+Not getting any results over ~66000 so just going to hard code that for version 1.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> BASES = {
-  <span class="hljs-attr">BASE_2</span>: <span class="hljs-string">"01"</span>,
-  <span class="hljs-attr">BASE_8</span>: <span class="hljs-string">"01234567"</span>,
-  <span class="hljs-attr">BASE_11</span>: <span class="hljs-string">"0123456789a"</span>,
-  <span class="hljs-attr">BASE_16</span>: <span class="hljs-string">"0123456789abcdef"</span>,
-  <span class="hljs-attr">BASE_32</span>: <span class="hljs-string">"0123456789ABCDEFGHJKMNPQRSTVWXYZ"</span>,
-  <span class="hljs-attr">BASE_36</span>: <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyz"</span>,
-  <span class="hljs-attr">BASE_58</span>: <span class="hljs-string">"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvqxyz"</span>,
-  <span class="hljs-attr">BASE_62</span>: <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>,
-  <span class="hljs-attr">BASE_64</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</span>,
-  <span class="hljs-attr">BASE_66</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~"</span>,
-  <span class="hljs-attr">BASE_95</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&amp;*()_`&lt;&gt;,.?'\";:[{]}\\|=- "</span>,
-  <span class="hljs-attr">FALL_BACK</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">max_i</span>)</span>{
-    <span class="hljs-keyword">let</span> res = <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&amp;*()_`&lt;&gt;,.?'\";:[{]}\\|=- "</span>;
-    <span class="hljs-keyword">if</span>(max_i &gt; res.length) <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">67777</span> &amp;&amp; res.length &lt; max_i; ++i) {
+        <span class="hljs-keyword">let</span> char = <span class="hljs-built_in">String</span>.fromCharCode(i);
+        <span class="hljs-keyword">if</span>(res.includes(char) <span class="hljs-comment">// Throw away included chars.</span>
+          || <span class="hljs-regexp">/^[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]*$/</span>.test(char) <span class="hljs-comment">// throw away some unicode spaces.</span>
+          || !<span class="hljs-regexp">/^[\u0020-\u007e\u00a0-\uffff]*$/</span>.test(char) <span class="hljs-comment">// Throw away 'unprintables'</span>
+          || <span class="hljs-regexp">/^[\u0fd9-\u0fff]*$/</span>.test(char) <span class="hljs-comment">// Throw away more unicode white spaces.</span>
+          || <span class="hljs-regexp">/\s/</span>.test(char) <span class="hljs-comment">// Throw away whitespaces.</span>
+        ) <span class="hljs-keyword">continue</span>;
+        res += char
+      }
+      <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i)
+    }
+  };</pre></div></div>
             
         </li>
         
@@ -87,24 +100,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>If the precomputations didnt help pump them up by looping through unicode.
-Not getting any results over ~66000 so just going to hard code that for version 1.</p>
+              <p>Retrieve the proper alphabet for use in conversiosn.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">67777</span> &amp;&amp; res.length &lt; max_i; ++i) {
-      <span class="hljs-keyword">let</span> char = <span class="hljs-built_in">String</span>.fromCharCode(i);
-      <span class="hljs-keyword">if</span>(res.includes(char) <span class="hljs-comment">// Throw away included chars.</span>
-        || <span class="hljs-regexp">/^[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]*$/</span>.test(char) <span class="hljs-comment">// throw away some unicode spaces.</span>
-        || !<span class="hljs-regexp">/^[\u0020-\u007e\u00a0-\uffff]*$/</span>.test(char) <span class="hljs-comment">// Throw away 'unprintables'</span>
-        || <span class="hljs-regexp">/^[\u0fd9-\u0fff]*$/</span>.test(char) <span class="hljs-comment">// Throw away more unicode white spaces.</span>
-        || <span class="hljs-regexp">/\s/</span>.test(char) <span class="hljs-comment">// Throw away whitespaces.</span>
-      ) <span class="hljs-keyword">continue</span>;
-      res += char;
-    }
-    <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i)
-  }
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> alphabet = <span class="hljs-function"><span class="hljs-params">a</span> =&gt;</span> {
+    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> a === <span class="hljs-string">'string'</span>)
+      <span class="hljs-keyword">return</span> a;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(BASES[<span class="hljs-string">'BASE_'</span> + a]) <span class="hljs-keyword">return</span> BASES[<span class="hljs-string">'BASE_'</span> + a];</pre></div></div>
             
         </li>
         
@@ -115,17 +118,15 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Retrieve the proper alphabet for use in conversiosn.</p>
+              <p>hard coded for version 1, can be avoided via the API (custom alphabets).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> alphabet = <span class="hljs-function"><span class="hljs-params">a</span> =&gt;</span> {
-  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> a === <span class="hljs-string">'string'</span>) {
-    <span class="hljs-keyword">if</span>(a.split(<span class="hljs-string">""</span>).sort().join(<span class="hljs-string">""</span>).match(<span class="hljs-regexp">/(.)\1/g</span>)) <span class="hljs-comment">// Check for duplicates.</span>
-      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Your alphabet must contain all unique charachters."</span>)
-    <span class="hljs-keyword">return</span> a;
-  }
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(BASES[<span class="hljs-string">'BASE_'</span> + a]) <span class="hljs-keyword">return</span> BASES[<span class="hljs-string">'BASE_'</span> + a];</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(a &gt; <span class="hljs-number">65411</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"You need to specify a custom alphabet via `setGlobalAlphabet` for a base over 65411."</span>);
+    <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> BASES.FALL_BACK(a);
+    }
+  };</pre></div></div>
             
         </li>
         
@@ -136,15 +137,11 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>hard coded for version 1, can be avoided via the API (custom alphabets).</p>
+              <p>Our own add function to circumvent javascripts 64bit floating cap.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(a &gt; <span class="hljs-number">65411</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"You need to specify a custom alphabet via `setGlobalAlphabet` for a base over 65411."</span>);
-  <span class="hljs-keyword">else</span> {
-    <span class="hljs-keyword">return</span> BASES.FALL_BACK(a);
-  }
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> add = <span class="hljs-function">(<span class="hljs-params">num1, num2, base</span>) =&gt;</span> {</pre></div></div>
             
         </li>
         
@@ -155,11 +152,13 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Our own add function to circumvent javascripts 64bit floating cap.</p>
+              <p>Our core buffer.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> add = <span class="hljs-function">(<span class="hljs-params">num1, num2, base</span>) =&gt;</span> {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> res = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(num1.length + num2.length), carry = <span class="hljs-number">0</span>, i = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span>(i &lt; num1.length || i &lt; num2.length || carry) {
+      <span class="hljs-keyword">let</span> total = carry + (num1[i]||<span class="hljs-number">0</span>) + (num2[i]||<span class="hljs-number">0</span>);</pre></div></div>
             
         </li>
         
@@ -170,13 +169,12 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Our core buffer.</p>
+              <p>Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> res = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(num1.length + num2.length), carry = <span class="hljs-number">0</span>, i = <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">while</span>(i &lt; num1.length || i &lt; num2.length || carry) {
-    <span class="hljs-keyword">let</span> total = carry + (num1[i]||<span class="hljs-number">0</span>) + (num2[i]||<span class="hljs-number">0</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      res[i++] = total % base;
+      carry = (total - total % base) / base</pre></div></div>
             
         </li>
         
@@ -187,12 +185,18 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.</p>
+              <p>grow buffer if we are carrying for next remainder check.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    res[i++] = total % base;
-    carry = (total - total % base) / base</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(carry &amp;&amp; i &gt;= res.length) {
+        <span class="hljs-keyword">let</span> copy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(num1.length + num2.length + res.length)
+        copy.set(res);
+        res = copy;
+      }
+    }
+    <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, i); <span class="hljs-comment">// Give back only whats needed.</span>
+  };</pre></div></div>
             
         </li>
         
@@ -203,18 +207,14 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>grow buffer if we are carrying for next remainder check.</p>
+              <p>Extend the addition function to introduce multiplications.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span>(carry &amp;&amp; i &gt;= res.length) {
-      <span class="hljs-keyword">let</span> copy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(num1.length + num2.length + res.length)
-      copy.set(res);
-      res = copy;
-    }
-  }
-  <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, i); <span class="hljs-comment">// Give back only whats needed.</span>
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> multiply = <span class="hljs-function">(<span class="hljs-params">num, exponent, base</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span>(num &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> num === <span class="hljs-number">0</span> ? [] : <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> result = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>();
+    <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {</pre></div></div>
             
         </li>
         
@@ -225,14 +225,17 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Extend the addition function to introduce multiplications.</p>
+              <p>Bit shit to the right and keep doubling the exponent</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> multiply = <span class="hljs-function">(<span class="hljs-params">num, exponent, base</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span>(num &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> num === <span class="hljs-number">0</span> ? [] : <span class="hljs-literal">null</span>;
-  <span class="hljs-keyword">var</span> result = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>();
-  <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      num &amp; <span class="hljs-number">1</span> &amp;&amp; (result = add(result, exponent, base)); <span class="hljs-comment">// First iteration will be 1.</span>
+      num = num &gt;&gt; <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">if</span>(num === <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;
+      exponent = add(exponent, exponent, base) <span class="hljs-comment">// double.</span>
+    }
+    <span class="hljs-keyword">return</span> result
+  };</pre></div></div>
             
         </li>
         
@@ -243,17 +246,21 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Bit shit to the right and keep doubling the exponent</p>
+              <p>Swap out to buffers to avoid memory limits.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    num &amp; <span class="hljs-number">1</span> &amp;&amp; (result = add(result, exponent, base)); <span class="hljs-comment">// First iteration will be 1.</span>
-    num = num &gt;&gt; <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span>(num === <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;
-    exponent = add(exponent, exponent, base) <span class="hljs-comment">// double.</span>
-  }
-  <span class="hljs-keyword">return</span> result
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> stringToNumberArray = <span class="hljs-function">(<span class="hljs-params">str, baseAlphabet</span>) =&gt;</span> {
+    <span class="hljs-keyword">var</span> charValues = str.split(<span class="hljs-string">''</span>);
+    <span class="hljs-keyword">var</span> res = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(charValues.length);
+    <span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = charValues.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+      <span class="hljs-keyword">var</span> n = baseAlphabet.indexOf(charValues[i]);
+      <span class="hljs-keyword">if</span>(n &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Your data is not found in your alphabet."</span>);
+      res[j++] = n;
+    }
+    <span class="hljs-keyword">return</span> res
+  };</pre></div></div>
             
         </li>
         
@@ -264,21 +271,20 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Swap out to buffers to avoid memory limits.</p>
+              <p>Conversion begins here.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> parseStrToNumberArray = <span class="hljs-function">(<span class="hljs-params">str, baseAlphabet</span>) =&gt;</span> {
-  <span class="hljs-keyword">var</span> digits = str.split(<span class="hljs-string">''</span>);
-  <span class="hljs-keyword">var</span> res = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(digits.length);
-  <span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = digits.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
-    <span class="hljs-keyword">var</span> n = baseAlphabet.indexOf(digits[i]);
-    <span class="hljs-keyword">if</span>(n &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Your data is not found in your alphabet."</span>);
-    res[j++] = n;
-  }
-  <span class="hljs-keyword">return</span> res
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> convertBase = <span class="hljs-function">(<span class="hljs-params">str, fromAlphabet, toAlphabet</span>) =&gt;</span> {
+    <span class="hljs-keyword">var</span> fromBase = fromAlphabet.length,
+    toBase = toAlphabet.length,
+    charValues = stringToNumberArray(str.toString(), fromAlphabet); <span class="hljs-comment">// coerce numbers to string</span>
+    <span class="hljs-keyword">if</span>(charValues === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> resNumbers = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(), exp = [<span class="hljs-number">1</span>];
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; charValues.length; ++i) {
+      resNumbers = add(resNumbers, multiply(charValues[i], exp, toBase), toBase);
+      exp = multiply(fromBase, exp, toBase)
+    }</pre></div></div>
             
         </li>
         
@@ -289,20 +295,14 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Conversion begins here.</p>
+              <p>And ends here.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> convertBase = <span class="hljs-function">(<span class="hljs-params">str, fromAlphabet, toAlphabet</span>) =&gt;</span> {
-  <span class="hljs-keyword">var</span> fromBase = fromAlphabet.length,
-  toBase = toAlphabet.length,
-  digits = parseStrToNumberArray(str.toString(), fromAlphabet); <span class="hljs-comment">// coerce numbers to string</span>
-  <span class="hljs-keyword">if</span>(digits === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
-  <span class="hljs-keyword">var</span> resNumbers = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(), exp = [<span class="hljs-number">1</span>];
-  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; digits.length; ++i) {
-    resNumbers = add(resNumbers, multiply(digits[i], exp, toBase), toBase);
-    exp = multiply(fromBase, exp, toBase)
-  }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> res = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">if</span>(!resNumbers.length) {
+      <span class="hljs-keyword">let</span> i = str.length;
+      <span class="hljs-keyword">while</span>(i--)</pre></div></div>
             
         </li>
         
@@ -313,26 +313,25 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>And ends here.</p>
+              <p>The stream being encoded was pure zeros.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> res = <span class="hljs-string">''</span>;
-  <span class="hljs-keyword">if</span>(!resNumbers.length) {
-  <span class="hljs-keyword">let</span> i = str.length;
-  <span class="hljs-keyword">while</span>(i--)
-    res += toAlphabet[<span class="hljs-number">0</span>]
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-keyword">let</span> i = resNumbers.length;
-    <span class="hljs-keyword">while</span>(i--)
- 		res += toAlphabet[resNumbers[i]]
-  }
-  <span class="hljs-keyword">return</span> res
-}
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">converter</span>(<span class="hljs-params">ia = null, oa = null</span>) </span>{ 
-<span class="hljs-built_in">console</span>.log(oa)
-<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(<span class="hljs-built_in">Object</span>.assign(<span class="hljs-keyword">new</span> Converter, {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        res += toAlphabet[<span class="hljs-number">0</span>]
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">let</span> i = resNumbers.length;
+      <span class="hljs-keyword">while</span>(i--)
+        res += toAlphabet[resNumbers[i]]
+    }
+    <span class="hljs-keyword">return</span> res
+  };
+  <span class="hljs-keyword">const</span> check = <span class="hljs-function"><span class="hljs-params">a</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span>(a.split(<span class="hljs-string">""</span>).sort().join(<span class="hljs-string">""</span>).match(<span class="hljs-regexp">/(.)\1/g</span>)) <span class="hljs-comment">// Check for duplicates.</span>
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Your alphabet must contain all unique charachters."</span>);
+      <span class="hljs-keyword">return</span> a
+  };
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">converter</span>(<span class="hljs-params">ia = null, oa = null</span>) </span>{
+    <span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>({</pre></div></div>
             
         </li>
         
@@ -347,15 +346,14 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  incAlphabet: ia,
-  <span class="hljs-attr">outAlphabet</span>: oa,
-  <span class="hljs-attr">fromXXXToYYY</span>: <span class="hljs-string">"Functions to encode and decode."</span>,
-  <span class="hljs-attr">setGlobalAlphabet</span>: <span class="hljs-string">"Set global alphabet."</span>,
-  <span class="hljs-attr">setFromAlphabet</span>: <span class="hljs-string">"Set from alphabet."</span>,
-  <span class="hljs-attr">setToAlphabet</span>: <span class="hljs-string">"Set to alphabet."</span>,
-}), {
-  get(t, name) { <span class="hljs-comment">// t is our target</span>
-    <span class="hljs-keyword">try</span> { <span class="hljs-keyword">if</span>(!(name + <span class="hljs-string">""</span>)) <span class="hljs-keyword">return</span> } <span class="hljs-keyword">catch</span>(e) { <span class="hljs-keyword">return</span> } <span class="hljs-comment">// Hack to drop loading errors.</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      fromXXXToYYY: <span class="hljs-string">"Functions to encode and decode."</span>,
+      <span class="hljs-attr">setGlobalAlphabet</span>: <span class="hljs-string">"Set both from and to alphabet."</span>,
+      <span class="hljs-attr">setFromAlphabet</span>: <span class="hljs-string">"Sets the from alphabet."</span>,
+      <span class="hljs-attr">setToAlphabet</span>: <span class="hljs-string">"Set the to alphabet."</span>,
+      <span class="hljs-attr">resetAlphabets</span>: <span class="hljs-string">"Resets the alhabets to default."</span>,
+    }, {
+      get(t, cmd) { <span class="hljs-comment">// t is our target</span>
+        <span class="hljs-keyword">try</span> { <span class="hljs-keyword">if</span>(!(cmd + <span class="hljs-string">""</span>)) <span class="hljs-keyword">return</span> } <span class="hljs-keyword">catch</span>(e) { <span class="hljs-keyword">return</span> } <span class="hljs-comment">// Hack to drop loading errors.</span></pre></div></div>
             
         </li>
         
@@ -370,18 +368,26 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^SetGlobalAlphabet$/i</span>.test(name)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">globalAlphabet</span>) </span>{
-      t.incAlphabet = t.outAlphabet = alphabet(globalAlphabet)
-      <span class="hljs-keyword">return</span> <span class="hljs-string">"setGlobalAlphabet done. "</span> + t.incAlphabet.length + <span class="hljs-string">" "</span> + t.outAlphabet.length
-    }
-    <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^SetFromAlphabet$/i</span>.test(name)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fromAlphabet</span>) </span>{
-      t.incAlphabet = alphabet(fromAlphabet);
-      <span class="hljs-keyword">return</span> <span class="hljs-string">"setFromAlphabet done. "</span> + t.incAlphabet.length
-    }
-    <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^SeTtoAlphabet$/i</span>.test(name)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">toAlphabet</span>) </span>{
-      t.outAlphabet = alphabet(toAlphabet);
-      <span class="hljs-keyword">return</span> <span class="hljs-string">"setToAlphabet done. "</span> + t.outAlphabet.length
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^dumpAlphabets$/i</span>.test(cmd)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+          <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>).writeFileSync(<span class="hljs-string">'encode-x_dumpAlphabets'</span>, <span class="hljs-string">'Last Computed Alphabet\n'</span>+LAST_COMPUTED_APLPH+<span class="hljs-string">'\n\nFrom Alphabet\n'</span>+t.incAlphabet+<span class="hljs-string">'\n\nTo Alphabet\n'</span>+t.outAlphabet);
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+        }
+        <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^resetAlphabets$/i</span>.test(cmd)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+          t.incAlphabet = t.outAlphabet = <span class="hljs-literal">null</span>;
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+        }
+        <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^SetGlobalAlphabet$/i</span>.test(cmd)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ga</span>) </span>{
+          t.incAlphabet = t.outAlphabet = check(ga)
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+        }
+        <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^SetFromAlphabet$/i</span>.test(cmd)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fa</span>) </span>{
+          t.incAlphabet = alphabet(fa);
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+        }
+        <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/^SeTtoAlphabet$/i</span>.test(cmd)) <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ta</span>) </span>{
+          t.outAlphabet = alphabet(ta);
+          <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
+        }</pre></div></div>
             
         </li>
         
@@ -396,18 +402,18 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> outIsData = srcIsData = <span class="hljs-literal">false</span>;
-    <span class="hljs-keyword">let</span> matches = name.match(<span class="hljs-regexp">/^from(\d+)to(\d+)$/i</span>);
-    <span class="hljs-keyword">if</span>(!matches) {
-      matches = name.match(<span class="hljs-regexp">/^from((?:str(?:ing)?)|text|utf8|data)to(\d+)$/i</span>);
-      <span class="hljs-keyword">if</span>(!matches) {
-        matches = name.match(<span class="hljs-regexp">/^from(\d+)to((?:str(?:ing)?)|text|utf8|data)$/i</span>);
-        <span class="hljs-keyword">if</span>(!matches) <span class="hljs-keyword">return</span>;
-        outIsData = <span class="hljs-literal">true</span>
-      } <span class="hljs-keyword">else</span> {
-        srcIsData = <span class="hljs-literal">true</span>
-      }
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> outIsData = srcIsData = <span class="hljs-literal">false</span>;
+         <span class="hljs-keyword">let</span> matches = cmd.match(<span class="hljs-regexp">/^from(\d+)to(\d+)$/i</span>);
+         <span class="hljs-keyword">if</span>(!matches) {
+          matches = cmd.match(<span class="hljs-regexp">/^from((?:str(?:ing)?)|text|utf8|data)to(\d+)$/i</span>);
+          <span class="hljs-keyword">if</span>(!matches) {
+            matches = cmd.match(<span class="hljs-regexp">/^from(\d+)to((?:str(?:ing)?)|text|utf8|data)$/i</span>);
+            <span class="hljs-keyword">if</span>(!matches) <span class="hljs-keyword">return</span>;
+            outIsData = <span class="hljs-literal">true</span>
+          } <span class="hljs-keyword">else</span> {
+            srcIsData = <span class="hljs-literal">true</span>
+          }
+        }</pre></div></div>
             
         </li>
         
@@ -422,7 +428,8 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">src</span>) </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">src</span>) </span>{
+          <span class="hljs-keyword">var</span> a1, a2;</pre></div></div>
             
         </li>
         
@@ -437,7 +444,7 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(srcIsData) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span>(srcIsData)</pre></div></div>
             
         </li>
         
@@ -452,19 +459,19 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        src = Buffer.from(src).toString(<span class="hljs-string">'hex'</span>);
-        a1 = alphabet(<span class="hljs-number">16</span>);
-        a2 = t.outAlphabet ? t.outAlphabet.slice(<span class="hljs-number">0</span>, matches[<span class="hljs-number">2</span>]) : alphabet(+matches[<span class="hljs-number">2</span>]);
-      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(outIsData) {
-        a1 = t.incAlphabet ? t.incAlphabet.slice(<span class="hljs-number">0</span>, matches[<span class="hljs-number">1</span>]) : alphabet(+matches[<span class="hljs-number">1</span>]);
-        a2 = alphabet(<span class="hljs-number">16</span>);
-      } <span class="hljs-keyword">else</span> {
-        a1 = t.incAlphabet ? t.incAlphabet.slice(<span class="hljs-number">0</span>, matches[<span class="hljs-number">1</span>]) : alphabet(+matches[<span class="hljs-number">1</span>]);
-        a2 = t.outAlphabet ? t.outAlphabet.slice(<span class="hljs-number">0</span>, matches[<span class="hljs-number">2</span>]) : alphabet(+matches[<span class="hljs-number">2</span>]);
-        <span class="hljs-keyword">if</span>(matches[<span class="hljs-number">1</span>] &gt; a1.length || matches[<span class="hljs-number">2</span>] &gt; a2.length) {
-          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"Alphabet not long enough, consider manually setting a larger one via `setGlobalAlphabet`."</span>)
-        }
-      }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            src = Buffer.from(src).toString(<span class="hljs-string">'hex'</span>);
+            a1 = alphabet(<span class="hljs-number">16</span>);
+          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(outIsData) {
+            a2 = alphabet(<span class="hljs-number">16</span>)
+          }
+          !a1 &amp;&amp; (a1 = t.incAlphabet ? t.incAlphabet.slice(<span class="hljs-number">0</span>, matches[<span class="hljs-number">1</span>]) : alphabet(+matches[<span class="hljs-number">1</span>]));
+          !a2 &amp;&amp; (a2 = t.outAlphabet ? t.outAlphabet.slice(<span class="hljs-number">0</span>, matches[<span class="hljs-number">2</span>]) : alphabet(+matches[<span class="hljs-number">2</span>]));
+          <span class="hljs-keyword">if</span>(!srcIsData &amp;&amp; matches[<span class="hljs-number">1</span>] &gt; a1.length) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"From alphabet not long enough, consider manually setting a larger one via `setFromAlphabet`."</span>)
+          }
+          <span class="hljs-keyword">if</span>(!outIsData &amp;&amp; matches[<span class="hljs-number">2</span>] &gt; a2.length) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"To alphabet not long enough, consider manually setting a larger one via `setToAlphabet`."</span>)
+          }</pre></div></div>
             
         </li>
         
@@ -479,11 +486,14 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">return</span> outIsData ? Buffer.from(convertBase(src, a1, a2), <span class="hljs-string">'hex'</span>).toString(<span class="hljs-string">'utf8'</span>) : convertBase(src, a1, a2);
-    }
-  }
-})
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">return</span> outIsData ? Buffer.from(convertBase(src, a1, a2), <span class="hljs-string">'hex'</span>).toString(<span class="hljs-string">'utf8'</span>) : convertBase(src, a1, a2)
+        }
+      }
+    })
+    ia &amp;&amp; (p.incAlphabet = ia);
+    oa &amp;&amp; (p.outAlphabet = oa);
+    <span class="hljs-keyword">return</span> p
+  }</pre></div></div>
             
         </li>
         
@@ -498,8 +508,8 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">try</span> { <span class="hljs-built_in">module</span>.exports = converter } <span class="hljs-keyword">catch</span>(e) { <span class="hljs-built_in">window</span>.convert = converter };
-}).apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">try</span> { <span class="hljs-built_in">module</span>.exports = converter } <span class="hljs-keyword">catch</span>(e) { <span class="hljs-built_in">window</span>.convert = converter };
+})();</pre></div></div>
             
         </li>
         
