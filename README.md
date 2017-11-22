@@ -17,7 +17,7 @@ As you can tell, the module works for all bases and uses a Proxy to capture the 
 The core algorithm uses modular division and bitshifting exponentiation logic applied directly to buffer streams. It is from my experience
 the only working base conversion package that actually works and scales. Also, for the most part, the code is completely original.
 
-For full documentation see the [enQue full docs](https://ileathan.github.io/encode-x).
+For full documentation see the [encode-x full docs](https://ileathan.github.io/encode-x).
 
 # Features
 
