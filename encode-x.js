@@ -165,7 +165,7 @@
         return function(src) {
           var a1, a2;
           // Begin alphabet configuration.
-          if(srcIsData)
+          if(srcIsData) {
             // Our source is not a number, so represent it as one.
             src = Buffer.from(src).toString('hex');
             a1 = alphabet(16);
