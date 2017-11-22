@@ -1,6 +1,6 @@
 {
   "name": "encode-x",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Original encoder and decoder, default goes up to base 65411.",
   "main": "encode-x.js",
   "scripts": {
