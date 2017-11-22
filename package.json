@@ -1,0 +1,37 @@
+{
+  "name": "encode-x",
+  "version": "1.0.0",
+  "description": "Original encoder and decoder, default goes up to base 65411.",
+  "main": "encode-x.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ileathan/encode.js.git"
+  },
+  "keywords": [
+    "encode",
+    "decode",
+    "base69",
+    "base79",
+    "base89",
+    "base99",
+    "base16",
+    "base53",
+    "base64",
+    "basex",
+    "encode-x",
+    "base-x",
+    "decode-x",
+    "encoder",
+    "decoder",
+    "crypto"
+  ],
+  "author": "leathan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ileathan/encode-x.js/issues"
+  },
+  "homepage": "https://github.com/ileathan/encode-x.js#readme"
+}
