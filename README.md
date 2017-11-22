@@ -4,7 +4,7 @@ Infinite base encoder/decoder. Can handle bases up to full 64 bit floating point
 ```javascript
 const C = require('encode-x')();
 
-C.from10To16(16)       // 'f'
+C.from10To16("16")       // 'f'
 C.from16To64("16")     // 'P'
 C.from10to64("63")     // '/'
 C.from10to65000("125") // '¿'
