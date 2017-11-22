@@ -33,6 +33,8 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 **6.)** For example using the above feature we can swap from alphabet 1 to 2 using `from10To10`.
 
+**7.)** A `dumpAlphabets` command to conveniently store your favorite, or needed alphabets.
+
 You may also require and call the object directly (like bellow), or even link to it from a browser. 
 
 ```javascript
