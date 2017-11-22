@@ -33,5 +33,8 @@
   "bugs": {
     "url": "https://github.com/ileathan/encode-x.js/issues"
   },
-  "homepage": "https://github.com/ileathan/encode-x.js#readme"
+  "homepage": "https://github.com/ileathan/encode-x.js#readme",
+  "directories": {
+    "doc": "docs"
+  }
 }
