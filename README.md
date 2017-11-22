@@ -33,7 +33,7 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 **6.)** For example using the above feature we can swap from alphabet 1 to 2 using `from10To10`.
 
-The above code snippet illustrates how simple it would be to execute the encoder, you may also call it directly without the `new` keyword.
+The above code snippet illustrates how simple it would be to create and execute the encoder, you may also choose to call it like so.
 
 ```javascript
 C = require('./encode-x')(/* [from alphabet], [to alphabet] */).fromXXXtoXXX(data) 
