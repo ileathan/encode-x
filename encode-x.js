@@ -1,6 +1,6 @@
 (function(){
-  var LAST_COMPUTED_ALPH;
-  // Precomputed bases to help out, specifically base58 for bitcoin and base64 for blobs.
+  var LAST_COMPUTED_ALPH = "";
+  // Precomputed bases to help out, specifically base16 for hex, base58 for bitcoin and base64 for blobs.
   const BASES = {
     BASE_2: "01",
     BASE_8: "01234567",
@@ -15,8 +15,8 @@
     BASE_95: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ",
     FALL_BACK: function(max_i){
       let res = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ";
+      if(LAST_COMPUTED_ALPH.length >= max_i) return LAST_COMPUTED_APLH.slice(0, max_i);
       if(res.length >= max_i) return res.slice(0, max_i);
-      if(LAST_COMPUTED_ALPH.length >= max_i) return res.slice(0, max_i);
       // If the precomputations didnt help pump them up by looping through unicode.
       // Not getting any results over ~66000 so just going to hard code that for version 1.
       for(let i = 0; i < 67777 && res.length < max_i; ++i) {
@@ -47,13 +47,13 @@
   const add = (num1, num2, base) => {
     // Our core buffer.
     var res = new Uint32Array(num1.length + num2.length), carry = 0, i = 0;
-    while(i < num1.length || i < num2.length || carry) {
+    while(i < num1.length || i < num2.length || carry || b && (b--)) {
       let total = carry + (num1[i]||0) + (num2[i]||0);
       // Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.
       res[i++] = total % base;
       carry = (total - total % base) / base
       // grow buffer if we are carrying for next remainder check.
-      if(carry && i >= res.length) {
+      if(carry && i >  res.length) {
         let copy = new Uint32Array(num1.length + num2.length + res.length)
         copy.set(res);
         res = copy;
@@ -126,7 +126,7 @@
       resetAlphabets: "Resets the alhabets to default.",
     }, {
       get(t, cmd) { // t is our target
-        try { if(!(cmd + "")) return } catch(e) { return } // Hack to drop loading errors.
+        try { if(!(cmd += "")) return } catch(e) { return } // Hack to drop loading errors. And coerce to string.
         // Regex parse for configuration requests.
         if(/^dumpAlphabets$/i.test(cmd)) return function() {
           require('fs').writeFileSync('encode-x_dumpAlphabets', 'Last Computed Alphabet\n'+LAST_COMPUTED_APLPH+'\n\nFrom Alphabet\n'+t.incAlphabet+'\n\nTo Alphabet\n'+t.outAlphabet);
@@ -148,21 +148,23 @@
           t.outAlphabet = alphabet(ta);
           return this
         }
-        // Regex parse for request to encode/decode.
+        // Flags
         var outIsData = srcIsData = false;
-         let matches = cmd.match(/^from(\d+)to(\d+)$/i);
-         if(!matches) {
-          matches = cmd.match(/^from((?:str(?:ing)?)|text|utf8|data)to(\d+)$/i);
-          if(!matches) {
-            matches = cmd.match(/^from(\d+)to((?:str(?:ing)?)|text|utf8|data)$/i);
-            if(!matches) return;
-            outIsData = true
-          } else {
-            srcIsData = true
-          }
-        }
+        // Old regex was /^[x20-x7e]+$/ -- ascii, Even older was /^[\x00-\xff]*$/ -- extended ascii (x7f is 'del')
+        var cmds = '(?:\\d+|hex(?:idecimal)?|data|utf8|text|oct(?:al)?|bin(?:ary)?|oth(?:er)?|btc|bitcoin|(?:(?:b(?:ase)?)?(?:\\d+))?blob)';
+        var cmdRe = new RegExp('from(' + cmds + ')to(' + cmds + ')', 'i');
+        var matches = cmd.match(cmdRe);
+        if(!matches) return;
+        // Parse for request to encode/decode.
+        else if(/data|utf8|oth|text/i.test(matches[1])) { matches[1] = 16; srcIsData = true }
+        else if(/data|utf8|oth|text/i.test(matches[2])) { matches[2] = 16; srcIsData = true }
+        var checker, possibles = ['hex', 16, 'btc', 58, 'bitcoin', 58, 'blob', 64, 'bin', 2, 'oct', 8];
+        if(checker = possibles.indexOf(matches[1]) > 0) matches[1] = possibles[checker+1];
+        if(checker = possibles.indexOf(matches[2]) > 0) matches[2] = possibles[checker+1];
         // Our only 'public' facing function.
         return function(src) {
+          if(+matches[1] === 64 && +matches[2] === 16) return Buffer.from(src, 'base64').toString('hex');
+          if(+matches[2] === 16 && +matches[1] === 64) return Buffer.from(src, 'hex').toString('base64');
           var a1, a2;
           // Begin alphabet configuration.
           if(srcIsData) {

@@ -36,5 +36,8 @@
   "homepage": "https://github.com/ileathan/encode-x.js#readme",
   "directories": {
     "doc": "docs"
+  },
+  "devDependencies": {
+    "blob-to-buffer": "^1.2.6"
   }
 }
