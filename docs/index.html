@@ -31,7 +31,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
-  <span class="hljs-keyword">var</span> LAST_COMPUTED_ALPH;</pre></div></div>
+  <span class="hljs-keyword">var</span> LAST_COMPUTED_ALPH = <span class="hljs-string">""</span>;</pre></div></div>
             
         </li>
         
@@ -42,7 +42,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Precomputed bases to help out, specifically base58 for bitcoin and base64 for blobs.</p>
+              <p>Precomputed bases to help out, specifically base16 for hex, base58 for bitcoin and base64 for blobs.</p>
 
             </div>
             
@@ -60,8 +60,8 @@
     <span class="hljs-attr">BASE_95</span>: <span class="hljs-string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&amp;*()_`&lt;&gt;,.?'\";:[{]}\\|=- "</span>,
     <span class="hljs-attr">FALL_BACK</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">max_i</span>)</span>{
       <span class="hljs-keyword">let</span> res = <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&amp;*()_`&lt;&gt;,.?'\";:[{]}\\|=- "</span>;
-      <span class="hljs-keyword">if</span>(res.length &gt;= max_i) <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i);
-      <span class="hljs-keyword">if</span>(LAST_COMPUTED_ALPH.length &gt;= max_i) <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i);</pre></div></div>
+      <span class="hljs-keyword">if</span>(LAST_COMPUTED_ALPH.length &gt;= max_i) <span class="hljs-keyword">return</span> LAST_COMPUTED_APLH.slice(<span class="hljs-number">0</span>, max_i);
+      <span class="hljs-keyword">if</span>(res.length &gt;= max_i) <span class="hljs-keyword">return</span> res.slice(<span class="hljs-number">0</span>, max_i);</pre></div></div>
             
         </li>
         
@@ -157,7 +157,7 @@ Not getting any results over ~66000 so just going to hard code that for version 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> res = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(num1.length + num2.length), carry = <span class="hljs-number">0</span>, i = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">while</span>(i &lt; num1.length || i &lt; num2.length || carry) {
+    <span class="hljs-keyword">while</span>(i &lt; num1.length || i &lt; num2.length || carry || b &amp;&amp; (b--)) {
       <span class="hljs-keyword">let</span> total = carry + (num1[i]||<span class="hljs-number">0</span>) + (num2[i]||<span class="hljs-number">0</span>);</pre></div></div>
             
         </li>
@@ -189,7 +189,7 @@ Not getting any results over ~66000 so just going to hard code that for version 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(carry &amp;&amp; i &gt;= res.length) {
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span>(carry &amp;&amp; i &gt;  res.length) {
         <span class="hljs-keyword">let</span> copy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(num1.length + num2.length + res.length)
         copy.set(res);
         res = copy;
@@ -353,7 +353,7 @@ Not getting any results over ~66000 so just going to hard code that for version 
       <span class="hljs-attr">resetAlphabets</span>: <span class="hljs-string">"Resets the alhabets to default."</span>,
     }, {
       get(t, cmd) { <span class="hljs-comment">// t is our target</span>
-        <span class="hljs-keyword">try</span> { <span class="hljs-keyword">if</span>(!(cmd + <span class="hljs-string">""</span>)) <span class="hljs-keyword">return</span> } <span class="hljs-keyword">catch</span>(e) { <span class="hljs-keyword">return</span> } <span class="hljs-comment">// Hack to drop loading errors.</span></pre></div></div>
+        <span class="hljs-keyword">try</span> { <span class="hljs-keyword">if</span>(!(cmd += <span class="hljs-string">""</span>)) <span class="hljs-keyword">return</span> } <span class="hljs-keyword">catch</span>(e) { <span class="hljs-keyword">return</span> } <span class="hljs-comment">// Hack to drop loading errors. And coerce to string.</span></pre></div></div>
             
         </li>
         
@@ -398,22 +398,11 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Regex parse for request to encode/decode.</p>
+              <p>Flags</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> outIsData = srcIsData = <span class="hljs-literal">false</span>;
-         <span class="hljs-keyword">let</span> matches = cmd.match(<span class="hljs-regexp">/^from(\d+)to(\d+)$/i</span>);
-         <span class="hljs-keyword">if</span>(!matches) {
-          matches = cmd.match(<span class="hljs-regexp">/^from((?:str(?:ing)?)|text|utf8|data)to(\d+)$/i</span>);
-          <span class="hljs-keyword">if</span>(!matches) {
-            matches = cmd.match(<span class="hljs-regexp">/^from(\d+)to((?:str(?:ing)?)|text|utf8|data)$/i</span>);
-            <span class="hljs-keyword">if</span>(!matches) <span class="hljs-keyword">return</span>;
-            outIsData = <span class="hljs-literal">true</span>
-          } <span class="hljs-keyword">else</span> {
-            srcIsData = <span class="hljs-literal">true</span>
-          }
-        }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> outIsData = srcIsData = <span class="hljs-literal">false</span>;</pre></div></div>
             
         </li>
         
@@ -424,12 +413,14 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Our only ‘public’ facing function.</p>
+              <p>Old regex was /^[x20-x7e]+$/ – ascii, Even older was /^[\x00-\xff]*$/ – extended ascii (x7f is ‘del’)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">src</span>) </span>{
-          <span class="hljs-keyword">var</span> a1, a2;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> cmds = <span class="hljs-string">'(?:\\d+|hex(?:idecimal)?|data|utf8|text|oct(?:al)?|bin(?:ary)?|oth(?:er)?|btc|bitcoin|(?:(?:b(?:ase)?)?(?:\\d+))?blob)'</span>;
+        <span class="hljs-keyword">var</span> cmdRe = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">'from('</span> + cmds + <span class="hljs-string">')to('</span> + cmds + <span class="hljs-string">')'</span>, <span class="hljs-string">'i'</span>);
+        <span class="hljs-keyword">var</span> matches = cmd.match(cmdRe);
+        <span class="hljs-keyword">if</span>(!matches) <span class="hljs-keyword">return</span>;</pre></div></div>
             
         </li>
         
@@ -440,11 +431,15 @@ Not getting any results over ~66000 so just going to hard code that for version 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>Begin alphabet configuration.</p>
+              <p>Parse for request to encode/decode.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span>(srcIsData) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/data|utf8|oth|text/i</span>.test(matches[<span class="hljs-number">1</span>])) { matches[<span class="hljs-number">1</span>] = <span class="hljs-number">16</span>; srcIsData = <span class="hljs-literal">true</span> }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-regexp">/data|utf8|oth|text/i</span>.test(matches[<span class="hljs-number">2</span>])) { matches[<span class="hljs-number">2</span>] = <span class="hljs-number">16</span>; srcIsData = <span class="hljs-literal">true</span> }
+        <span class="hljs-keyword">var</span> checker, possibles = [<span class="hljs-string">'hex'</span>, <span class="hljs-number">16</span>, <span class="hljs-string">'btc'</span>, <span class="hljs-number">58</span>, <span class="hljs-string">'bitcoin'</span>, <span class="hljs-number">58</span>, <span class="hljs-string">'blob'</span>, <span class="hljs-number">64</span>, <span class="hljs-string">'bin'</span>, <span class="hljs-number">2</span>, <span class="hljs-string">'oct'</span>, <span class="hljs-number">8</span>];
+        <span class="hljs-keyword">if</span>(checker = possibles.indexOf(matches[<span class="hljs-number">1</span>]) &gt; <span class="hljs-number">0</span>) matches[<span class="hljs-number">1</span>] = possibles[checker+<span class="hljs-number">1</span>];
+        <span class="hljs-keyword">if</span>(checker = possibles.indexOf(matches[<span class="hljs-number">2</span>]) &gt; <span class="hljs-number">0</span>) matches[<span class="hljs-number">2</span>] = possibles[checker+<span class="hljs-number">1</span>];</pre></div></div>
             
         </li>
         
@@ -454,6 +449,39 @@ Not getting any results over ~66000 so just going to hard code that for version 
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Our only ‘public’ facing function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">src</span>) </span>{
+          <span class="hljs-keyword">if</span>(+matches[<span class="hljs-number">1</span>] === <span class="hljs-number">64</span> &amp;&amp; +matches[<span class="hljs-number">2</span>] === <span class="hljs-number">16</span>) <span class="hljs-keyword">return</span> Buffer.from(src, <span class="hljs-string">'base64'</span>).toString(<span class="hljs-string">'hex'</span>);
+          <span class="hljs-keyword">if</span>(+matches[<span class="hljs-number">2</span>] === <span class="hljs-number">16</span> &amp;&amp; +matches[<span class="hljs-number">1</span>] === <span class="hljs-number">64</span>) <span class="hljs-keyword">return</span> Buffer.from(src, <span class="hljs-string">'hex'</span>).toString(<span class="hljs-string">'base64'</span>);
+          <span class="hljs-keyword">var</span> a1, a2;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Begin alphabet configuration.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="hljs-keyword">if</span>(srcIsData) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Our source is not a number, so represent it as one.</p>
 
@@ -476,11 +504,11 @@ Not getting any results over ~66000 so just going to hard code that for version 
         </li>
         
         
-        <li id="section-22">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>If our output is not to be a number, assume its text/utf8..</p>
 
@@ -498,11 +526,11 @@ Not getting any results over ~66000 so just going to hard code that for version 
         </li>
         
         
-        <li id="section-23">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Try to ensure compatibility accross browsers and node.</p>
 
