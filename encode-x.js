@@ -163,8 +163,8 @@
         if(checker = possibles.indexOf(matches[2].toLowerCase()) > 0) matches[2] = possibles[checker+1];
         // Our only 'public' facing function.
         return function(src) {
-          if(+matches[1] === 64 && +matches[2] === 16) return Buffer.from(src, 'base64').toString('hex');
-          if(+matches[2] === 16 && +matches[1] === 64) return Buffer.from(src, 'hex').toString('base64');
+          if(+matches[1] === 64 && +matches[2] === 16) Buffer.from(src, 'base64').toString('hex');
+          if(+matches[1] === 16 && +matches[2] === 64) Buffer.from(src, 'hex').toString('base64');
           var a1, a2;
           // Begin alphabet configuration.
           if(srcIsData) {
