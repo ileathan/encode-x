@@ -47,7 +47,7 @@
   const add = (num1, num2, base) => {
     // Our core buffer.
     var res = new Uint32Array(num1.length + num2.length), carry = 0, i = 0;
-    while(i < num1.length || i < num2.length || carry || b && (b--)) {
+    while(i < num1.length || i < num2.length || carry) {
       let total = carry + (num1[i]||0) + (num2[i]||0);
       // Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.
       res[i++] = total % base;
