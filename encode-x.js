@@ -159,8 +159,8 @@
         else if(/data|utf8|oth|text/i.test(matches[1])) { matches[1] = 16; srcIsData = true }
         else if(/data|utf8|oth|text/i.test(matches[2])) { matches[2] = 16; srcIsData = true }
         var checker, possibles = ['hex', 16, 'btc', 58, 'bitcoin', 58, 'blob', 64, 'bin', 2, 'oct', 8];
-        if(checker = possibles.indexOf(matches[1]) > 0) matches[1] = possibles[checker+1];
-        if(checker = possibles.indexOf(matches[2]) > 0) matches[2] = possibles[checker+1];
+        if(checker = possibles.indexOf(matches[1].toLowerCase()) > 0) matches[1] = possibles[checker+1];
+        if(checker = possibles.indexOf(matches[2].toLowerCase()) > 0) matches[2] = possibles[checker+1];
         // Our only 'public' facing function.
         return function(src) {
           if(+matches[1] === 64 && +matches[2] === 16) return Buffer.from(src, 'base64').toString('hex');
