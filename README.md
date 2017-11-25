@@ -62,11 +62,15 @@ require('encode-x').setGlobalAlphabet("1234567890abcde").dumpAlphabets().from64T
 
 None.
 
-## THE BELLOW IS CODE SEPERATE FROM ENCODE-X, IT IS WHAT INSPIRED ME TO CONTINUE PAST THE MEMORY LIMITS AND INTO INFINITE BASES. I REPEAT, THE BELLOW CODE IS __NOT PART OF ENOCDE-X__
+- ![#f03c15]# THE BELLOW IS CODE SEPERATE FROM ENCODE-X, IT IS WHAT INSPIRED ME TO CONTINUE PAST THE MEMORY LIMITS AND INTO INFINITE BASES. I REPEAT, THE BELLOW CODE IS __NOT PART OF ENOCDE-X__ `#f03c15`
+- ![#c5f015](https://placehold.it/15/c5f015/000000?text=+) `#c5f015`
+- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) `#1589F0`
 
 
 
-# Example using this modules core logic to parse rgb[a] color data into hexidecimal format..
+
+
+## Example using this modules core logic to parse rgb[a] color data into hexidecimal format..
 
 ```javascript
 /* Unless the regular expressions are modified accordingly...
