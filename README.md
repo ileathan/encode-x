@@ -63,8 +63,8 @@ require('encode-x').setGlobalAlphabet("1234567890abcde").dumpAlphabets().from64T
 None.
 
 
-![#c5f015](https://placehold.it/15/c5f015/000000?text=+teesting+the+thing) `#c5f015`
-![#1589F0](https://placehold.it/15/1589F0/000000?text=Hellow) test `#1589F0`
+![#c5f015](https://placehold.it/15/c5f015/000000?text=+teesting+the+thing)`#c5f015`
+![#1589F0](https://placehold.it/15/1589F0/000000?text=Hellow)`#1589F0`
 
 
 
