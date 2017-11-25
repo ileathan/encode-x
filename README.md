@@ -60,7 +60,7 @@ None.
 
 # The entire code in 1 gist.
 
-```
+```javascript
 // This can be used to parse css rgb[a] colors into hexidecimal.
 // of the format "rgb(255, 0, 26)" or "rgba(213, 11, 0, 70)"
 function cssRGBToHex(cssRGB) {
@@ -90,7 +90,7 @@ function cssRGBToHex(cssRGB) {
 
 Extended a bit less than the module, but enough for the curious mind.
 
-```
+```javascript
 function Convert(data, raw) { // Assume "255"
   if(raw) return {this} = raw;
   this._raw = Buffer.from(new Uint8Array(data.length)) || null;
