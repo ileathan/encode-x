@@ -32,7 +32,7 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 **4.)** Ability to encode and decode streems of pure 0's. (usually lost data in encodings).
 
-**5.)** Ability to encode to an alphabet differant than the incomings base alphabet.
+**5.)** Ability to encode/decode from/to using a base different than the incoming/outgoing base.
 
 **6.)** For example using the above feature we can swap from alphabet 1 to 2 using `from10To10`.
 
