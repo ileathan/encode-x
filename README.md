@@ -62,9 +62,9 @@ require('encode-x').setGlobalAlphabet("1234567890abcde").dumpAlphabets().from64T
 
 None.
 
-- ![#f03c15] THE BELLOW IS CODE SEPERATE FROM ENCODE-X, IT IS WHAT INSPIRED ME TO CONTINUE PAST THE MEMORY LIMITS AND INTO INFINITE BASES. I REPEAT, THE BELLOW CODE IS __NOT PART OF ENOCDE-X__ `#f03c15`
-- ![#c5f015](https://placehold.it/15/c5f015/000000?text=+test) `#c5f015`
-- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) test `#1589F0`
+
+![#c5f015](https://placehold.it/15/c5f015/000000?text=+teesting+the+thing) `#c5f015`
+![#1589F0](https://placehold.it/15/1589F0/000000?text=Hellow) test `#1589F0`
 
 
 
