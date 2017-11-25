@@ -57,3 +57,73 @@ C.from10to999(data) // Error is thrown because the alphabet it to small for base
 # Dependencies
 
 None.
+
+# The entire code in 1 gist.
+
+```
+// This can be used to parse css rgb[a] colors into hexidecimal.
+function cssRGBToHex(cssRGB) {
+  var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/).slice(1);
+  var alphabet = "0123456789abcdef";
+  var base = alphabet.length;
+  // Pop off the rgb ALPHA slot if its not present.
+  digits.slice(-1)[0] === undefined && digits.pop();
+
+  var res = [], carry = 0, i = 0; 
+
+  res = []; final = "";
+  digits.forEach(digit => { 
+    var carry;
+    do {
+      res.push(carry % base);
+      carry = digit = Math.floor(digit / base)|0;
+    } while(carry)
+    // Pad the hex number with 0's if needed.
+    res.push("0".repeat(res.length % 2));
+    final += res.map(x=>alphabet[x]).join('') + " ";
+    res = []; carry = 0;
+  })
+  return '#' + final;
+} 
+```
+
+Extended a bit less than the module, but enough for the curious mind.
+
+```
+function Convert(data, raw) { // Assume "255"
+  if(raw) return {this} = raw;
+  this._raw = Buffer.from(new Uint8Array(data.length)) || null;
+
+  // Our character map (up to base ~65411).
+  this.alphabet = null;
+  this._alphabet = new function() { 
+    return size => 
+      [...Array(size|0).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_)).slice(a)
+  }
+}
+Convert.prototype.encode(data, base) {
+  var alphabet = this.alphabet || (this.alphabet = this._alphabet(base||16));
+  var digits = this._raw || null;
+  var base = base || this.alphabet.length;
+
+  if(digits) {
+    try { digits = Buffer.from(new Uint8Array(data.length) }
+    catch(e) { this.FLAG_UTF8 = true; digits = Buffer.from(data) }
+  }
+  // digits.slice(-1)[0] === undefined && digits.pop(); -- Example to pop off useless 'decoding' data (like base64 ='s).
+  // Strips the [A] of the RGB[A] color data.  
+
+  digits.forEach(digit => { 
+    var carry, res = [];
+    do {
+      res.push(carry % base);
+      carry = digit = Math.floor(digit / base)|0;  // |0 for NaN
+    } while(carry)
+  
+    // res.push("0".repeat(res.length % 2)) -- an example to pad RGB[A] colors into proper hex format. (base 64 is similar)
+    final += res.map(_=>alphabet[_]).join('') + " ";
+    res = []; carry = 0;
+  })
+  console.log(final)
+} 
+```
