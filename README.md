@@ -77,21 +77,21 @@ None.
 function cssRGBToHex(cssRGB) {
   var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/).slice(1);
   var alphabet = "0123456789abcdef";
-  var dl = digits.length, base = alphabet.length;
+  var base = alphabet.length;
 
   // Pop off the rgb ALPHA slot if its not present.
   digits.slice(-1)[0] === undefined && digits.pop();
   var final = [];
   digits.forEach(digit => { 
-    var carry, res = [];
+    var res = [];
     do {
       res.push(digit % base);
       digit = Math.floor(digit / base)|0  // |0 for NaN
-    } while(digit)
+    } while(digit);
   
     res.push("0".repeat(res.length % 2));
     final += res.map(_=>alphabet[_]).join('');
-    res = []; carry = 0
+    res = []
   })
   return '#' + final
 } 
@@ -108,8 +108,8 @@ function Convert(data, raw) { // Assume "255"
   // Our character map (up to base ~65411).
   this.alphabet = null;
   this._alphabet = new function() { 
-    return size => 
-      [...Array(size|0).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_)).slice(a)
+    return s => 
+      [...Array(s+=56).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_))
   }
 }
 Convert.prototype.encode(data, base) {
