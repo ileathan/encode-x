@@ -1,5 +1,5 @@
 # encode-x
-Infinite base encoder/decoder. Can handle bases up to full 64 bit floating points.
+Infinite base encoder/decoder. Can handle bases up to full 64 bit floating points (Enough represent EVERY entire bitcoin private key address with at most 3 characters!). Only ~infinite time required!
 
 ```javascript
 const C = require('encode-x')();
