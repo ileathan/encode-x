@@ -64,6 +64,9 @@ None.
 
 # The entire code in 1 gist.
 
+## THE BELLOW IS CODE SEPERATE FROM ENCODE-X, IT IS WHAT INSPIRED ME TO CONTINUE PAST THE MEMORY LIMITS AND INTO INFINITE BASES.
+## I REPEAT, THE BELLOW CODE IS __NOT PART OF ENOCDE-X__
+
 ```javascript
 /* This can be used to parse css rgb[a] color data into hexidecimal format.
 * data should be of the format "rgba(213, 11, 0, 70)" or "rgb(113, 81, 70)"
