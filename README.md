@@ -62,8 +62,9 @@ None.
 
 ```
 // This can be used to parse css rgb[a] colors into hexidecimal.
+// of the format "rgb(255, 0, 26)" or "rgba(213, 11, 0, 70)"
 function cssRGBToHex(cssRGB) {
-  var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/).slice(1);
+  var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/i).slice(1);
   var alphabet = "0123456789abcdef";
   var base = alphabet.length;
   // Pop off the rgb ALPHA slot if its not present.
