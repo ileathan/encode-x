@@ -61,34 +61,34 @@ None.
 # The entire code in 1 gist.
 
 ```javascript
-// This can be used to parse css rgb[a] colors into hexidecimal.
-// of the format "rgb(255, 0, 26)" or "rgba(213, 11, 0, 70)"
+/* This can be used to parse css rgb[a] color data into hexidecimal format.
+* data should be of the format "rgba(213, 11, 0, 70)" or "rgb(113, 81, 70)"
+* returns '#d50b0046 and #4286f4 respectively. */
+
 function cssRGBToHex(cssRGB) {
-  var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/i).slice(1);
+  var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/).slice(1);
   var alphabet = "0123456789abcdef";
-  var base = alphabet.length;
+  var dl = digits.length, base = alphabet.length;
+
   // Pop off the rgb ALPHA slot if its not present.
   digits.slice(-1)[0] === undefined && digits.pop();
-
-  var res = [], carry = 0, i = 0; 
-
-  res = []; final = "";
+  var final = [];
   digits.forEach(digit => { 
-    var carry;
+    var carry, res = [];
     do {
-      res.push(carry % base);
-      carry = digit = Math.floor(digit / base)|0;
-    } while(carry)
-    // Pad the hex number with 0's if needed.
-    res.push("0".repeat(res.length % 2));
-    final += res.map(x=>alphabet[x]).join('') + " ";
+      res.push(digit % base);
+      digit = Math.floor(digit / base)|0;  // |0 for NaN
+    } while(digit)
+  
+    res.push("0".repeat(res.length % 2))
+    final += res.map(_=>alphabet[_]).join('');
     res = []; carry = 0;
   })
   return '#' + final;
 } 
-```
 
-Extended a bit less than the module, but enough for the curious mind.
+The above gist has been battle tested, the bellow is purely me typing into the README as an example.
+Extended a much less than the module, but enough for the curious mind.
 
 ```javascript
 function Convert(data, raw) { // Assume "255"
