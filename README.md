@@ -9,7 +9,7 @@ C.from16To64("16")                        // 'P'
 C.from10to64("63")                        // '/'
 C.from10to65000("125")                    // '¿'
 C.fromUTF8To666("The devil says, SICK!")  // '½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ'
-C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ')     // 'The devil says, SICK!'
+C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ')    // 'The devil says, SICK!'
 
 // fromDataToXXX and fromTextToXXX are synonyms for fromUTF8ToXXX
 // likewise one can do fromXXXtoData, and fromXXXtoText.
