@@ -18,7 +18,7 @@ C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ')    // 'The devil says, SICK!'
 As you can tell, the module works for all bases and uses a Proxy to capture the methods, they are not actually all defined on the prototype.
 
 The core algorithm uses modular division and bitshifting exponentiation logic applied directly to buffer streams. It is from my experience
-the only working full base conversion module that actually works and scales. Also, for the most part, the code is completely original.
+the only working full base conversion module that is both practical and scales to a high degree. Also, for the most part, the code is completely original.
 
 For full documentation see the [encode-x full docs](https://ileathan.github.io/encode-x).
 
