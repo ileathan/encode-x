@@ -41,13 +41,17 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 You may also require and call the object directly (like bellow), or even link to it from a browser. 
 
 ```javascript
-C = require('./encode-x')(/* [from alphabet], [to alphabet] */).fromXXXtoXXX(data) 
+reply = require('encode-x')(/* [from alphabet], [to alphabet] */).fromXXXtoXXX(data) 
      
       /* OR */
 
-C = require('./encode-x')
+C = require('encode-x')()
 C.setToAlphabet = C.setFromAlphabet = "1234567890abcdefgahiklm"
 C.from10to999(data) // Error is thrown because the alphabet it to small for base999.
+
+      /* OR */
+
+require('encode-x').setGlobalAlphabet("1234567890abcde").dumpAlphabets().from64To100(/*...*/);
 ```
 
 # Instalation
