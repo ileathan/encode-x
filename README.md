@@ -90,6 +90,7 @@ function cssRGBToHex(cssRGB) {
   })
   return '#' + final
 } 
+```
 
 The above gist has been battle tested, the bellow is purely me typing into the README as an example.
 Extended a much less than the module, but enough for the curious mind.
