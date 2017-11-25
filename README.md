@@ -67,7 +67,7 @@ None.
 ```javascript
 /* This can be used to parse css rgb[a] color data into hexidecimal format.
 * data should be of the format "rgba(213, 11, 0, 70)" or "rgb(113, 81, 70)"
-* returns '#d50b0046 and #4286f4 respectively. */
+* returns "#d50b0046" and "#4286f4" respectively. */
 
 function cssRGBToHex(cssRGB) {
   var digits = cssRGB.match(/^rgba?\((\d{0,3}), ?(\d{0,3}), ?(\d{0,3})(?:, ?(\d{0,3})\))?\)?$/).slice(1);
