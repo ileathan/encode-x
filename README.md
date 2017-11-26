@@ -82,8 +82,9 @@ function cssRGBToHex(cssRGB) {
   // Pop off the rgb ALPHA slot if its not present.
   digits.slice(-1)[0] === undefined && digits.pop();
   var final = [];
-  digits.forEach(digit => { 
-    var res = [];
+  for(let i = 0, l = digits.length; i < l; ++i) {
+    let digit = digits[i], res = []; 
+
     do {
       res.push(digit % base);
       digit = Math.floor(digit / base)|0  // |0 for NaN
@@ -92,7 +93,7 @@ function cssRGBToHex(cssRGB) {
     res.push("0".repeat(res.length % 2));
     final += res.map(_=>alphabet[_]).join('');
     res = []
-  })
+  }
   return '#' + final
 } 
 ```
