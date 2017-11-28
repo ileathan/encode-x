@@ -15,6 +15,11 @@ C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ');    // 'The devil says, SICK!
 // likewise one can do fromXXXtoData, and fromXXXtoText.
 ```
 
+In case you come to need the base default alphabet, its mapped with a simple unicode loop.
+
+```javascript
+[...Array(s+=56).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_))
+```
 As you can tell, the module works for all bases and uses a Proxy to capture the methods, they are not actually all defined on the prototype.
 
 The core algorithm uses modular division and bitshifting exponentiation logic applied directly to buffer streams. It is from my experience
@@ -24,7 +29,7 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 # Features
 
-**1.)** In built alphabets, up to base 65411 by default.
+**1.)** In built alphabets, up to base *1 million +** by default.
 
 **2.)** `setGlobalAlphabet`, `setFromAlphabet`, `setToAlphabet`, and `resetAlphabets` API for ease.
 
