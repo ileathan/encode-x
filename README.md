@@ -29,7 +29,7 @@ For full documentation see the [encode-x full docs](https://ileathan.github.io/e
 
 # Features
 
-**1.)** In built alphabets, up to base *1 million +** by default.
+**1.)** In built alphabets, up to base *1 million** plus by default.
 
 **2.)** `setGlobalAlphabet`, `setFromAlphabet`, `setToAlphabet`, and `resetAlphabets` API for ease.
 
