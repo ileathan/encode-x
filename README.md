@@ -18,7 +18,7 @@ C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ');    // 'The devil says, SICK!
 In case you come to need the default alphabet(if unspecified, and no precomputed base matches), its mapped with a simple unicode loop.
 
 ```javascript
-[...Array(s+=56).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_))
+[...Array(AMOUNT_DESIRED+=48).keys()].slice(48).map(_=>String.fromCharCode(_))
 ```
 As you can tell, the module works for all bases and uses a Proxy to capture the methods, they are not actually all defined on the prototype.
 
@@ -115,7 +115,7 @@ function Convert(data, raw) { // Assume "255"
   this.alphabet = null;
   this._alphabet = new function() { 
     return s => 
-      [...Array(s+=56).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_))
+      [...Array(s+=48).keys()].slice(48).map(_=>String.fromCharCode(_))
   }
 }
 Convert.prototype.encode(data, base) {
