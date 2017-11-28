@@ -18,18 +18,9 @@
       if(LAST_COMPUTED_ALPH.length >= max_i) return LAST_COMPUTED_APLH.slice(0, max_i);
       if(res.length >= max_i) return res.slice(0, max_i);
       // If the precomputations didnt help pump them up by looping through unicode.
-      // Not getting any results over ~66000 so just going to hard code that for version 1.
-      for(let i = 0; i < 67777 && res.length < max_i; ++i) {
-        let char = String.fromCharCode(i);
-        if(res.includes(char) // Throw away included chars.
-          || /^[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]*$/.test(char) // throw away some unicode spaces.
-          || !/^[\u0020-\u007e\u00a0-\uffff]*$/.test(char) // Throw away 'unprintables'
-          || /^[\u0fd9-\u0fff]*$/.test(char) // Throw away more unicode white spaces.
-          || /\s/.test(char) // Throw away whitespaces.
-        ) continue;
-        res += char
-      }
-      return res.slice(0, max_i)
+
+      // With this new code we go up past base 1 million by default :)
+      return [...Array(max_i).keys()].slice(48).map(_=>String.fromCharCode(_))
     }
   };
   // Retrieve the proper alphabet for use in conversiosn.
