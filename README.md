@@ -15,7 +15,7 @@ C.from666ToUTF8('½Ǥɰ:ɧźaM)ûȭǉĎʍ9ĿƢȷ');    // 'The devil says, SICK!
 // likewise one can do fromXXXtoData, and fromXXXtoText.
 ```
 
-In case you come to need the base default alphabet, its mapped with a simple unicode loop.
+In case you come to need the default alphabet(if unspecified, and no precomputed base matches), its mapped with a simple unicode loop.
 
 ```javascript
 [...Array(s+=56).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_))
