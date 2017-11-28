@@ -110,7 +110,6 @@ function Convert(data, raw) { // Assume "255"
   this.alphabet = null;
   this._alphabet = new function() { 
     return s => 
-      // This mapping is much better than the one used in this repo's source code.
       [...Array(s+=56).keys()].slice(48).copyWithin(7,0,10).map(_=>String.fromCharCode(_))
   }
 }
