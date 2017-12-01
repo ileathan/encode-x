@@ -73,7 +73,7 @@ None.
 __It is what inspired me to go past the memory limits__
 
 
-## Example using this modules core logic to parse rgb[a] color data into hexidecimal format..
+## Example using this modules core logic to parse rgb[a] data into hex..
 
 ```javascript
 /* Unless the regular expressions are modified accordingly...
