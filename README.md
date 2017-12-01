@@ -96,6 +96,7 @@ function cssRGBToHex(cssRGB) {
       digit = Math.floor(digit / base)|0  // |0 for NaN
     } while(digit);
   
+    // Create padding if the rgba # was under 0x10
     res.push("0".repeat(res.length % 2));
     final += res.map(_=>alphabet[_]).join('');
     res = []
