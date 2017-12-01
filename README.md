@@ -69,7 +69,8 @@ None.
 
 <p>
 
-# THE BELLOW IS CODE SEPERATE FROM ENCODE-X, IT IS WHAT INSPIRED ME TO CONTINUE PAST THE MEMORY LIMITS AND INTO INFINITE BASES. I REPEAT, THE BELLOW CODE IS __NOT PART OF ENOCDE-X__
+# THE BELLOW CODE IS NOT PART OF ENCODE-X
+__It is what inspired me to go past the memory limits__
 
 
 ## Example using this modules core logic to parse rgb[a] color data into hexidecimal format..
