@@ -15,12 +15,12 @@
     BASE_95: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ",
     FALL_BACK: function(max_i){
       let res = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ";
-      if(LAST_COMPUTED_ALPH.length >= max_i) return LAST_COMPUTED_APLH.slice(0, max_i);
+      if(LAST_COMPUTED_ALPH.length >= max_i) return LAST_COMPUTED_ALPH.slice(0, max_i);
       if(res.length >= max_i) return res.slice(0, max_i);
       // If the precomputations didnt help pump them up by looping through unicode.
 
       // With this new code we go up past base 1 million by default :)
-      return [...Array(max_i).keys()].slice(48).map(_=>String.fromCharCode(_))
+      return [...Array(max_i+48).keys()].slice(48).map(_=>String.fromCharCode(_))
     }
   };
   // Retrieve the proper alphabet for use in conversiosn.
@@ -29,7 +29,6 @@
       return a;
     else if(BASES['BASE_' + a]) return BASES['BASE_' + a];
     // hard coded for version 1, can be avoided via the API (custom alphabets).
-    else if(a > 65411) throw new Error("You need to specify a custom alphabet via `setGlobalAlphabet` for a base over 65411.");
     else {
       return BASES.FALL_BACK(a);
     }
@@ -37,25 +36,19 @@
   // Our own add function to circumvent javascripts 64bit floating cap.
   const add = (num1, num2, base) => {
     // Our core buffer.
-    var res = new Uint32Array(num1.length + num2.length), carry = 0, i = 0;
-    while(i < num1.length || i < num2.length || carry) {
+    var res = [], carry = 0, i = 0;
+    while(carry || i < num1.length || i < num2.length) {
       let total = carry + (num1[i]||0) + (num2[i]||0);
+
       // Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.
-      res[i++] = total % base;
-      carry = (total - total % base) / base
-      // grow buffer if we are carrying for next remainder check.
-      if(carry && i >  res.length) {
-        let copy = new Uint32Array(num1.length + num2.length + res.length)
-        copy.set(res);
-        res = copy;
-      }
+      carry = (total - (res[i++] = total % base)) / base
     }
-    return res.slice(0, i); // Give back only whats needed.
+    return res; // Give back only whats needed.
   };
   // Extend the addition function to introduce multiplications.
   const multiply = (num, exponent, base) => {
     if(num <= 0) return num === 0 ? [] : null;
-    var result = new Uint32Array();
+    var result = [];
     while(true) {
       // Bit shit to the right and keep doubling the exponent
       num & 1 && (result = add(result, exponent, base)); // First iteration will be 1.
@@ -68,7 +61,7 @@
   // Swap out to buffers to avoid memory limits.
   const stringToNumberArray = (str, baseAlphabet) => {
     var charValues = str.split('');
-    var res = new Uint32Array(charValues.length);
+    var res = [];
     var j = 0;
     for(let i = charValues.length - 1; i >= 0; i--) {
       var n = baseAlphabet.indexOf(charValues[i]);
@@ -83,7 +76,7 @@
     toBase = toAlphabet.length,
     charValues = stringToNumberArray(str.toString(), fromAlphabet); // coerce numbers to string
     if(charValues === null) return null;
-    var resNumbers = new Uint32Array(), exp = [1];
+    var resNumbers = [], exp = [1];
     for(let i = 0; i < charValues.length; ++i) {
       resNumbers = add(resNumbers, multiply(charValues[i], exp, toBase), toBase);
       exp = multiply(fromBase, exp, toBase)
@@ -132,10 +125,18 @@
           return this
         }
         if(/^SetFromAlphabet$/i.test(cmd)) return function(fa) {
+          if(ta.split(' ').length > 1) {
+            t.incAlphabet = ta.split(' ');
+            return this
+          }
           t.incAlphabet = alphabet(fa);
           return this
         }
-        if(/^SeTtoAlphabet$/i.test(cmd)) return function(ta) {
+        if(/^SetToAlphabet$/i.test(cmd)) return function(ta) {
+          if(ta.split(' ').length > 1) {
+            t.outAlphabet = ta.split(' ');
+            return this
+          }
           t.outAlphabet = alphabet(ta);
           return this
         }
