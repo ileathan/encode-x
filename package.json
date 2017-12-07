@@ -1,0 +1,71 @@
+{
+  "_from": "encode-x",
+  "_id": "encode-x@1.3.1",
+  "_inBundle": false,
+  "_integrity": "sha512-ANsFxdDoLu9JaKLbHQY0cKeO3NVV1R8Grn7AP+Fh/fMHthgyyuCwL9Y2zf0tVg8u2YB5M1O85EspMN2vvBw5yg==",
+  "_location": "/encode-x",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "encode-x",
+    "name": "encode-x",
+    "escapedName": "encode-x",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/encode-x/-/encode-x-1.3.1.tgz",
+  "_shasum": "ec038120bc1b76a658cda4ac404de991bc85268d",
+  "_spec": "encode-x",
+  "_where": "/Users/leathan/tmp",
+  "author": {
+    "name": "leathan"
+  },
+  "bugs": {
+    "url": "https://github.com/ileathan/encode-x.js/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Original encoder and decoder, default goes up to base 65411.",
+  "devDependencies": {
+    "blob-to-buffer": "^1.2.6"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "homepage": "https://github.com/ileathan/encode-x.js#readme",
+  "keywords": [
+    "encode",
+    "decode",
+    "base69",
+    "base79",
+    "base89",
+    "base99",
+    "base16",
+    "base53",
+    "base64",
+    "basex",
+    "encode-x",
+    "base-x",
+    "decode-x",
+    "encoder",
+    "decoder",
+    "crypto"
+  ],
+  "license": "MIT",
+  "main": "encode-x.js",
+  "name": "encode-x",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ileathan/encode.js.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.4.0"
+}
