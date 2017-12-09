@@ -1,4 +1,5 @@
 (function(){
+  const BN = require('bignumber.js');
   var LAST_COMPUTED_ALPH = "";
   // Precomputed bases to help out, specifically base16 for hex, base58 for bitcoin and base64 for blobs.
   const BASES = {
@@ -8,6 +9,7 @@
     BASE_16: "0123456789abcdef",
     BASE_32: "0123456789ABCDEFGHJKMNPQRSTVWXYZ",
     BASE_36: "0123456789abcdefghijklmnopqrstuvwxyz",
+    BASE_52: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOP",
     BASE_58: "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvqxyz",
     BASE_62: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
     BASE_64: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
@@ -29,7 +31,7 @@
       return a === 'poker' ? BASE_POKER : a;
     else if(BASES['BASE_' + a]) return BASES['BASE_' + a];
     // hard coded for version 1, can be avoided via the API (custom alphabets).
-    else if(a > 87777) throw new Error("Extension required for bases over 87777, or they overflow.");
+    //else if(a > 87777) throw new Error("Extension required for bases over 87777, or they overflow.");
     else {
       return BASES.FALL_BACK(a);
     }
@@ -37,18 +39,19 @@
   // Our own add function to circumvent javascripts 64bit floating cap.
   const add = (num1, num2, base) => {
     // Our core buffer.
-    var res = [], carry = 0, i = 0;
-    while(carry || i < num1.length || i < num2.length) {
-      let total = carry + (num1[i]||0) + (num2[i]||0);
-
+    var res = [], carry = BN(0), total = BN(0), i = 0;
+    while(!carry.isZero() || i < num1.length || i < num2.length) {
+      total = carry.plus(num1[i]||0).plus(num2[i]||0);
+      res[i++] = total.mod(base);
       // Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.
-      carry = (total - (res[i++] = total % base)) / base
+      carry = total.minus(total.mod(base)).div(base)
     }
     return res; // Give back only whats needed.
   };
   // Extend the addition function to introduce multiplications.
   const multiply = (num, exponent, base) => {
-    if(num <= 0) return num === 0 ? [] : null;
+    if(num <= 0) return num === 0 ? [] : 0;
+    num = BN(num);
     var result = [];
     while(true) {
       // Bit shit to the right and keep doubling the exponent
@@ -67,7 +70,7 @@
     for(let i = charValues.length - 1; i >= 0; i--) {
       var n = baseAlphabet.indexOf(charValues[i]);
       if(n < 0) throw new Error("Your data is not found in your alphabet.");
-      res[j++] = n;
+      res[j++] = BN(n);
     }
     return res
   };
