@@ -13,22 +13,23 @@
     BASE_64: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
     BASE_66: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~",
     BASE_95: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ",
+    BASE_POKER: "",
     FALL_BACK: function(max_i){
       let res = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ";
       if(LAST_COMPUTED_ALPH.length >= max_i) return LAST_COMPUTED_ALPH.slice(0, max_i);
       if(res.length >= max_i) return res.slice(0, max_i);
       // If the precomputations didnt help pump them up by looping through unicode.
-
       // With this new code we go up past base 1 million by default :)
-      return [...Array(max_i+48).keys()].slice(48).map(_=>String.fromCharCode(_))
+      return LAST_COMPUTED_ALPH = [...Array(max_i+48).keys()].slice(48).map(_=>String.fromCharCode(_))
     }
   };
   // Retrieve the proper alphabet for use in conversiosn.
   const alphabet = a => {
     if(typeof a === 'string')
-      return a;
+      return a === 'poker' ? BASE_POKER : a;
     else if(BASES['BASE_' + a]) return BASES['BASE_' + a];
     // hard coded for version 1, can be avoided via the API (custom alphabets).
+    else if(a > 87777) throw new Error("Extension required for bases over 87777, or they overflow.");
     else {
       return BASES.FALL_BACK(a);
     }
@@ -155,8 +156,8 @@
         if(checker = possibles.indexOf(matches[2].toLowerCase()) > 0) matches[2] = possibles[checker+1];
         // Our only 'public' facing function.
         return function(src) {
-          if(+matches[1] === 64 && +matches[2] === 16) Buffer.from(src, 'base64').toString('hex');
-          if(+matches[1] === 16 && +matches[2] === 64) Buffer.from(src, 'hex').toString('base64');
+          if(+matches[1] === 64 && +matches[2] === 16) return Buffer.from(src, 'base64').toString('hex');
+          if(+matches[1] === 16 && +matches[2] === 64) return Buffer.from(src, 'hex').toString('base64');
           var a1, a2;
           // Begin alphabet configuration.
           if(srcIsData) {
