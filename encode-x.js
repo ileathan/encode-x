@@ -15,7 +15,7 @@
     BASE_64: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
     BASE_66: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~",
     BASE_95: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ",
-    BASE_POKER: "",
+    BASE_POKER: = "", // Will add later.
     FALL_BACK: function(max_i){
       let res = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~!@#$%^&*()_`<>,.?'\";:[{]}\\|=- ";
       if(LAST_COMPUTED_ALPH.length >= max_i) return LAST_COMPUTED_ALPH.slice(0, max_i);
@@ -30,8 +30,6 @@
     if(typeof a === 'string')
       return a === 'poker' ? BASE_POKER : a;
     else if(BASES['BASE_' + a]) return BASES['BASE_' + a];
-    // hard coded for version 1, can be avoided via the API (custom alphabets).
-    //else if(a > 87777) throw new Error("Extension required for bases over 87777, or they overflow.");
     else {
       return BASES.FALL_BACK(a);
     }
@@ -46,12 +44,11 @@
       // Modulous devision to swap bases. newNum = remainder concatinated with the remainders remainder and so on.
       carry = total.minus(total.mod(base)).div(base)
     }
-    return res; // Give back only whats needed.
+    return res
   };
   // Extend the addition function to introduce multiplications.
   const multiply = (num, exponent, base) => {
     if(num <= 0) return num === 0 ? [] : 0;
-    num = BN(num);
     var result = [];
     while(true) {
       // Bit shit to the right and keep doubling the exponent
@@ -82,8 +79,8 @@
     if(charValues === null) return null;
     var resNumbers = [], exp = [1];
     for(let i = 0; i < charValues.length; ++i) {
-      resNumbers = add(resNumbers, multiply(charValues[i], exp, toBase), toBase);
-      exp = multiply(fromBase, exp, toBase)
+      resNumbers = add(resNumbers, multiply(BN(charValues[i]), exp, toBase), toBase);
+      exp = multiply(BN(fromBase), exp, toBase)
     }
     // And ends here.
     var res = '';
@@ -159,8 +156,8 @@
         if(checker = possibles.indexOf(matches[2].toLowerCase()) > 0) matches[2] = possibles[checker+1];
         // Our only 'public' facing function.
         return function(src) {
-          if(+matches[1] === 64 && +matches[2] === 16) return Buffer.from(src, 'base64').toString('hex');
-          if(+matches[1] === 16 && +matches[2] === 64) return Buffer.from(src, 'hex').toString('base64');
+          if(+matches[1] === 64 && +matches[2] === 16 && Buffer) return Buffer.from(src, 'base64').toString('hex');
+          if(+matches[1] === 16 && +matches[2] === 64 && Buffer) return Buffer.from(src, 'hex').toString('base64');
           var a1, a2;
           // Begin alphabet configuration.
           if(srcIsData) {
@@ -179,6 +176,7 @@
             throw new Error("To alphabet not long enough, consider manually setting a larger one via `setToAlphabet`.")
           }
           // If our output is not to be a number, assume its text/utf8..
+          // So this needs to be modified or the output for UTF8 wont work on browsers (They dont have Buffer defined yet...)
           return outIsData ? Buffer.from(convertBase(src, a1, a2), 'hex').toString('utf8') : convertBase(src, a1, a2)
         }
       }
@@ -188,5 +186,6 @@
     return p
   }
   // Try to ensure compatibility accross browsers and node.
-  try { module.exports = converter } catch(e) { window.convert = converter };
+  try { module.exports = converter } catch(e) { window.converter = converter }
+
 })();
