@@ -147,3 +147,8 @@ Convert.prototype.encode(data, base) {
 } 
 
 ```
+
+
+
+-------------------------------------------------------------------------
+- with <3 from https://leat.io
