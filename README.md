@@ -113,7 +113,7 @@ function Convert(data, raw) { // Assume "255"
   if(raw) return {this} = raw;
   this._raw = Buffer.from(new Uint8Array(data.length)) || null;
 
-  // Our character map (up to base ~65411).
+  // Our character map.
   this.alphabet = null;
   this._alphabet = new function() { 
     return s => 
