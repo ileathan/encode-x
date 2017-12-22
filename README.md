@@ -143,7 +143,9 @@ Convert.prototype.encode(data, base) {
     final += res.map(_=>alphabet[_]).join('') + " ";
     res = []; carry = 0;
   })
-  console.log(final)
+
+  return final.slice(-1);
+  // console.log(final) prints out the encoded str
 } 
 
 ```
