@@ -1,6 +1,7 @@
 (function(){
+  var BN;
   try {
-    const BN = require('bignumber.js');
+    BN = require('bignumber.js');
   } catch(e) {
     console.log("You need to install, include bignumber.js or modify the code and potentialy larger bases")
   }
