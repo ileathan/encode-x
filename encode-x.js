@@ -1,5 +1,9 @@
 (function(){
-  const BN = require('bignumber.js');
+  try {
+    const BN = require('bignumber.js');
+  } catch(e) {
+    console.log("You need to install, include bignumber.js or modify the code and potentialy larger bases")
+  }
   var LAST_COMPUTED_ALPH = "";
   // Precomputed bases to help out, specifically base16 for hex, base58 for bitcoin and base64 for blobs.
   const BASES = {
@@ -141,7 +145,7 @@
           return this
         }
         // Flags
-        var outIsData = srcIsData = false;
+        var outIsData = false, srcIsData = false;
         // Old regex was /^[x20-x7e]+$/ -- ascii, Even older was /^[\x00-\xff]*$/ -- extended ascii (x7f is 'del')
         var cmds = '(?:\\d+|hex(?:idecimal)?|data|utf8|text|oct(?:al)?|bin(?:ary)?|oth(?:er)?|btc|bitcoin|(?:(?:b(?:ase)?)?(?:\\d+))?blob)';
         var cmdRe = new RegExp('from(' + cmds + ')to(' + cmds + ')', 'i');
